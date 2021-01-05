@@ -1,6 +1,0 @@
-account_id = ""
-name = "helloworld-msteams-bot"
-route = ""
-type = "javascript"
-workers_dev = true
-zone_id = ""

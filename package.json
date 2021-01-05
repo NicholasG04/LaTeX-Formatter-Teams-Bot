@@ -1,16 +1,22 @@
 {
-  "private": true,
-  "name": "latex-formatter-1",
+  "name": "latex-formatter-teams-bot",
   "version": "1.0.0",
-  "description": "A template for kick starting a Cloudflare Workers MS Teams Webhook Bot",
-  "main": "index.js",
+  "description": "",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write '**/*.{js,css,json,md}'"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Nick <33908215+NicholasG04@users.noreply.github.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "prettier": "^1.18.2"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicholasG04/LaTeX-Formatter-Teams-Bot.git"
+  },
+  "author": "NicholasG04",
+  "license": "All Rights Reserved",
+  "bugs": {
+    "url": "https://github.com/NicholasG04/LaTeX-Formatter-Teams-Bot/issues"
+  },
+  "homepage": "https://github.com/NicholasG04/LaTeX-Formatter-Teams-Bot#readme",
+  "dependencies": {
+    "polka": "^0.5.2"
   }
 }
