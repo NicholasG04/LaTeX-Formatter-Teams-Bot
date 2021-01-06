@@ -1,4 +1,7 @@
 node_modules/
+
 dist/
-config.ts
+temp/
+img-output/
+
 .env

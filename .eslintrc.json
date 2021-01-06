@@ -4,7 +4,7 @@
         "node": true
     },
     "extends": [
-        "airbnb-base"
+        "airbnb-typescript-prettier"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -15,5 +15,6 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "consistent-return": "off"
     }
 }
