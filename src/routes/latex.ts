@@ -1,4 +1,6 @@
 import { BotFrameworkAdapter, TurnContext } from "botbuilder";
+import sizeOf from "image-size";
+import path from "path";
 
 import type { Request, Response } from "express";
 import generateDoc from "../helpers/generateDoc";
@@ -29,16 +31,20 @@ const latex = (req: Request, res: Response): void => {
       if (output.error) {
         return turnContext.sendActivity(output.error);
       }
-      console.log(`${process.env.BASE_URL}/img-output/${output.img}`);
+
+      const { width, height } = sizeOf(
+        path.join(path.resolve(), "img-output", output.img as string)
+      );
+
       return turnContext.sendActivity({
-        text: "Output:",
-        attachments: [
-          {
-            contentType: "image/png",
-            contentUrl: `${process.env.BASE_URL}/img-output/${output.img}`,
-            name: "Output of your LaTeX",
-          },
-        ],
+        // attachments: [
+        //   {
+        //     contentType: "image/png",
+        //     contentUrl: `${process.env.BASE_URL}/img-output/${output.img}`,
+        //     name: "Output of your LaTeX",
+        //   },
+        // ],
+        text: `<img src="${process.env.BASE_URL}/img-output/${output.img}" height="${height}" width="${width}" />`,
       });
     }
   });

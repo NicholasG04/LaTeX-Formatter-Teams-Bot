@@ -15,7 +15,8 @@ const dockerBuild = async (
 
   const latexCmd =
     "timeout 5 latex -interaction nonstopmode -halt-on-error --no-shell-escape equation.tex";
-  const dvipngCmd = "dvipng equation -o equation.png";
+  const dvipngCmd =
+    "dvipng equation -D 600 -T tight -o equation.png --height --width";
 
   const docker = new Docker();
 
@@ -25,11 +26,11 @@ const dockerBuild = async (
 
   await streamToPromise(await docker.pull(imgName));
 
-  let errorText = "";
+  let output = "";
   const writableStream = new stream.Writable();
   // eslint-disable-next-line no-underscore-dangle
   writableStream._write = (chunk, encoding, done) => {
-    errorText += chunk.toString();
+    output += chunk.toString();
     done();
   };
 
@@ -55,7 +56,7 @@ const dockerBuild = async (
   } else {
     result.error =
       "Error converting LaTeX to image. Please check that the input is valid.";
-    console.log(errorText);
+    console.log(output);
   }
 
   fs.rmdirSync(tempAbsPath, { recursive: true });
