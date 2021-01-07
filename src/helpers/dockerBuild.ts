@@ -1,7 +1,6 @@
 import Docker from "dockerode";
 import path from "path";
 import fs from "fs";
-import streamToPromise from "stream-to-promise";
 import stream from "stream";
 import type { Result } from "../types";
 
@@ -15,16 +14,28 @@ const dockerBuild = async (
 
   const latexCmd =
     "timeout 5 latex -interaction nonstopmode -halt-on-error --no-shell-escape equation.tex";
-  const dvipngCmd =
-    "dvipng equation -D 600 -T tight -o equation.png --height --width";
+  const dvipngCmd = "dvipng equation -D 600 -T tight -o equation.png";
+  const imgmagickCmd =
+    "imagemagick convert -border 10 -bordercolor white equation.png equation.png";
 
   const docker = new Docker();
 
-  const imgName = "blang/latex:ubuntu";
+  const imgName = "nicholasg/latex:ubuntu";
 
   const result: Result = {};
 
-  await streamToPromise(await docker.pull(imgName));
+  const imageStream = await docker.buildImage(
+    {
+      context: __dirname,
+      src: ["Dockerfile"],
+    },
+    { t: imgName }
+  );
+  await new Promise((resolve, reject) => {
+    docker.modem.followProgress(imageStream, (err: string, res: string) =>
+      err ? reject(err) : resolve(res)
+    );
+  });
 
   let output = "";
   const writableStream = new stream.Writable();
@@ -36,7 +47,7 @@ const dockerBuild = async (
 
   await docker.run(
     imgName,
-    ["bash", "-c", `${latexCmd} && ${dvipngCmd}`],
+    ["bash", "-c", `${latexCmd} && ${dvipngCmd} && ${imgmagickCmd}`],
     writableStream,
     {
       HostConfig: {
@@ -59,6 +70,7 @@ const dockerBuild = async (
     console.log(output);
   }
 
+  console.log(output);
   fs.rmdirSync(tempAbsPath, { recursive: true });
 
   return result;

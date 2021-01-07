@@ -36,16 +36,9 @@ const latex = (req: Request, res: Response): void => {
         path.join(path.resolve(), "img-output", output.img as string)
       );
 
-      return turnContext.sendActivity({
-        // attachments: [
-        //   {
-        //     contentType: "image/png",
-        //     contentUrl: `${process.env.BASE_URL}/img-output/${output.img}`,
-        //     name: "Output of your LaTeX",
-        //   },
-        // ],
-        text: `<img src="${process.env.BASE_URL}/img-output/${output.img}" height="${height}" width="${width}" />`,
-      });
+      return turnContext.sendActivity(
+        `<img src="${process.env.BASE_URL}/img-output/${output.img}" height="${height}" width="${width}" />`
+      );
     }
   });
 };
