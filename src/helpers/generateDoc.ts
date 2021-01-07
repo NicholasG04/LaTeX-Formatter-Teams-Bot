@@ -14,11 +14,11 @@ const generateID = () => {
 };
 
 export default async (equation: string): Promise<Result> => {
-  let eqnInput = equation;
-  if (/\\\\(?!$)/.test(eqnInput) && !eqnInput.includes("&")) {
-    // if any "\\" not at EOF, unless intentionally aligned with &
-    eqnInput = `&${eqnInput.replace(/\\\\(?!$)/g, "\\\\&")}`; // replace any "\\" not at EOF with "\\&", to enforce left alignment
-  }
+  const eqnInput = equation
+    .split("\n")
+    .filter((line) => line.match(/\w+/g))
+    .map((line) => (line.endsWith("\\\\") ? line : `${line}\\\\`))
+    .join("\n");
   const docText = `
   \\documentclass[12pt]{article}
   \\usepackage{amsmath}

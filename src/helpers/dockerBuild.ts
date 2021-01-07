@@ -16,7 +16,7 @@ const dockerBuild = async (
     "timeout 5 latex -interaction nonstopmode -halt-on-error --no-shell-escape equation.tex";
   const dvipngCmd = "dvipng equation -D 600 -T tight -o equation.png";
   const imgmagickCmd =
-    "imagemagick convert -border 10 -bordercolor white equation.png equation.png";
+    "convert -border 10 -bordercolor white equation.png equation.png";
 
   const docker = new Docker();
 
@@ -24,18 +24,14 @@ const dockerBuild = async (
 
   const result: Result = {};
 
-  const imageStream = await docker.buildImage(
-    {
-      context: __dirname,
-      src: ["Dockerfile"],
-    },
-    { t: imgName }
-  );
-  await new Promise((resolve, reject) => {
-    docker.modem.followProgress(imageStream, (err: string, res: string) =>
-      err ? reject(err) : resolve(res)
+  const images = await docker.listImages();
+  if (!images.find((i) => i.RepoTags.includes(imgName))) {
+    console.error(
+      "Error, build image first with docker build -t nicholasg/latex:ubuntu container/"
     );
-  });
+    result.error = "Error, contact developer. Issue with getting docker image";
+    return result;
+  }
 
   let output = "";
   const writableStream = new stream.Writable();
@@ -70,7 +66,6 @@ const dockerBuild = async (
     console.log(output);
   }
 
-  console.log(output);
   fs.rmdirSync(tempAbsPath, { recursive: true });
 
   return result;

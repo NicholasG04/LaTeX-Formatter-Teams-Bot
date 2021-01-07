@@ -16,5 +16,6 @@
     ],
     "rules": {
         "consistent-return": "off"
-    }
+    },
+    "ignorePatterns": ["node_modules/", "ecosystem.config.js"]
 }
