@@ -7,7 +7,7 @@ import helmet from "helmet";
 import latex from "./routes/latex";
 
 const app = express();
-const port = 3987;
+const port = process.env.PORT || 3987;
 
 app.use(json()).use(helmet());
 app.use("/img-output", express.static("img-output"));
