@@ -37,7 +37,7 @@ const latex = (req: Request, res: Response): void => {
       );
 
       return turnContext.sendActivity(
-        `<img src="${process.env.BASE_URL}/img-output/${output.img}" height="${height}" width="${width}" />`
+        `<h2>LaTeX Output | Requested By: ${turnContext.activity.from.name}</h2><img src="${process.env.BASE_URL}/img-output/${output.img}" height="${height}" width="${width}" />`
       );
     }
   });
